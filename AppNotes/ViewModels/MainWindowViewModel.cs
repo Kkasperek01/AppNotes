@@ -1,34 +1,62 @@
-﻿using Avalonia.Controls.Shapes;
+using Avalonia.Controls.Shapes;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.IO;
 
 namespace test.ViewModels;
+
 public partial class MainWindowViewModel : ObservableObject
 {
-    private const string FilePath = "notes.txt";
+    
+    private const string NotesFolder = "Notes";
 
     [ObservableProperty]
-    private string notatka = "";
+    private DateTime? selectedDate = DateTime.Today;
+
+    [ObservableProperty]
+    private string notatka = string.Empty;
 
     public MainWindowViewModel()
     {
-        // Wczytaj zawartość pliku przy starcie
-        if (File.Exists(FilePath))
-        {
-            Notatka = File.ReadAllText(FilePath);
-        }
+        
+        Directory.CreateDirectory(NotesFolder);
+        LoadNoteForDate(SelectedDate);
+    }
+
+    
+    partial void OnSelectedDateChanged(DateTime? value)
+    {
+        LoadNoteForDate(value);
     }
 
     [RelayCommand]
-    public void ZapiszCommand()
+    public void Zapisz()
     {
-        Console.WriteLine("Dodałe tekst do pliku");
-        using (StreamWriter outputFile = new StreamWriter(FilePath))
+        if (SelectedDate == null) return;
+        var path = GetFilePath(SelectedDate.Value);
+        File.WriteAllText(path, Notatka ?? string.Empty);
+    }
+
+    private void LoadNoteForDate(DateTime? date)
+    {
+        if (date == null)
         {
-            outputFile.WriteLine(notatka);
+            Notatka = string.Empty;
+            return;
         }
+
+        var path = GetFilePath(date.Value);
+        if (File.Exists(path))
+            Notatka = File.ReadAllText(path);
+        else
+            Notatka = string.Empty;
+    }
+
+    private string GetFilePath(DateTime date)
+    {
+        var fileName = date.ToString("yyyy-MM-dd") + ".txt";
+        return System.IO.Path.Combine(NotesFolder, fileName);
+
     }
 }
-
