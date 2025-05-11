@@ -2,6 +2,7 @@ using Avalonia.Controls.Shapes;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace test.ViewModels;
@@ -16,6 +17,9 @@ public partial class MainWindowViewModel : ObservableObject
 
     [ObservableProperty]
     private string notatka = string.Empty;
+
+    [ObservableProperty]
+    private List<String> zadania = ["test1", "test2"];
 
     public MainWindowViewModel()
     {
@@ -50,7 +54,7 @@ public partial class MainWindowViewModel : ObservableObject
         if (File.Exists(path))
             Notatka = File.ReadAllText(path);
         else
-            Notatka = string.Empty;
+            Notatka = "Brak notatki na wybrany dzień";
     }
 
     private string GetFilePath(DateTime date)
