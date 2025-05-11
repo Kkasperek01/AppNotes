@@ -3,7 +3,7 @@
         xmlns:vm="using:test.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="650"
         x:Class="test.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
@@ -14,19 +14,30 @@
              to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
 		<vm:MainWindowViewModel/>
 	</Design.DataContext>
-	
+
 	<StackPanel Margin="10">
-		<StackPanel Margin="20">
-			<Calendar x:Name="calendar" SelectionMode="MultipleRange"/>
-			<TextBlock Margin="20"
-					   Text="{Binding #calendar.SelectedDate}"/>
-		</StackPanel>
+		<UniformGrid Rows="1" Columns="2" Margin="20">
+			<Calendar x:Name="calendar" DisplayDate="{Binding SelectedDate}" SelectedDate="{Binding SelectedDate}" SelectionMode="SingleDate"/>
+			<StackPanel>
+				<TextBlock Margin="20"
+						   Text="{Binding SelectedDate}"/>
+				<TextBox Watermark="Dodaj zadanie"></TextBox>
+				<ListBox ItemsSource="{Binding Zadania}">
+					<ListBox.ItemTemplate>
+						<DataTemplate>
+							<CheckBox Content="{Binding}"></CheckBox>
+						</DataTemplate>
+					</ListBox.ItemTemplate>
+				</ListBox>
+			</StackPanel>
+
+		</UniformGrid>
 		<TextBlock Text="Twoje notatki:" FontWeight="Bold"/>
 		<TextBox AcceptsReturn="True"
-                 Height="200"
+                 Height="130"
                  Text="{Binding Notatka, Mode=TwoWay}" />
 		<Button Content="Zapisz" Margin="0,10,0,0"
                 Command="{Binding ZapiszCommand}" />
 	</StackPanel>
-	
+
 </Window>
