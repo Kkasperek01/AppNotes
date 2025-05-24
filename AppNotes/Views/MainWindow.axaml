@@ -3,6 +3,7 @@
         xmlns:vm="using:test.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:model="using:AppNotes.Models"
         mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="650"
         x:Class="test.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
@@ -24,8 +25,8 @@
 				<TextBox Watermark="Dodaj zadanie"></TextBox>
 				<ListBox ItemsSource="{Binding Zadania}">
 					<ListBox.ItemTemplate>
-						<DataTemplate>
-							<CheckBox Content="{Binding}"></CheckBox>
+						<DataTemplate DataType="model:Task">
+							<CheckBox IsChecked="{Binding IsChecked}" Content="{Binding Name}"></CheckBox>
 						</DataTemplate>
 					</ListBox.ItemTemplate>
 				</ListBox>
